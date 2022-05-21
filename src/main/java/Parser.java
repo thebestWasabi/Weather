@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    private static Document getPage() throws IOException{
+    private static Document getPage() throws IOException {
         String url = "https://pogoda.spb.ru/";
         Document page = Jsoup.parse(new URL(url), 3000);
         return page;
@@ -29,16 +29,15 @@ public class Parser {
         throw new Exception("Can't extract date from string");
     }
 
-    private static void printFourValues(Elements values, int index) {
+    private static int printPartValues(Elements values, int index) {
+        int iterationCount = 4;
 
         if (index == 0) {
             Element valueLn = values.get(3);
             boolean isMorning = valueLn.text().contains("Утро");
-            int iterationCount = 4;
             if (isMorning) {
                 iterationCount = 3;
             }
-
             for (int i = 0; i < iterationCount; i++) {
                 Element valueLine = values.get(index + i);
                 for (Element td : valueLine.select("td")) {
@@ -48,14 +47,15 @@ public class Parser {
             }
 
         } else {
-            for (int i = 0; i < 4; i++) {
-                Element valueLine = values.get(index);
+            for (int i = 0; i < iterationCount; i++) {
+                Element valueLine = values.get(index + i);
                 for (Element td : valueLine.select("td")) {
                     System.out.print(td.text() + "    ");
                 }
                 System.out.println();
             }
         }
+        return iterationCount;
     }
 
     public static void main(String[] args) throws Exception {
@@ -72,7 +72,8 @@ public class Parser {
             String date = getDateFromString(dateString);
             System.out.println();
             System.out.println(date + "    Явление    Температура    Давление    Влажность    Ветер");
-            printFourValues(values, index);
+            int iterationCount = printPartValues(values, index);
+            index = index + iterationCount;
         }
 
     }
