@@ -29,6 +29,35 @@ public class Parser {
         throw new Exception("Can't extract date from string");
     }
 
+    private static void printFourValues(Elements values, int index) {
+
+        if (index == 0) {
+            Element valueLn = values.get(3);
+            boolean isMorning = valueLn.text().contains("Утро");
+            int iterationCount = 4;
+            if (isMorning) {
+                iterationCount = 3;
+            }
+
+            for (int i = 0; i < iterationCount; i++) {
+                Element valueLine = values.get(index + i);
+                for (Element td : valueLine.select("td")) {
+                    System.out.print(td.text() + "    ");
+                }
+                System.out.println();
+            }
+
+        } else {
+            for (int i = 0; i < 4; i++) {
+                Element valueLine = values.get(index);
+                for (Element td : valueLine.select("td")) {
+                    System.out.print(td.text() + "    ");
+                }
+                System.out.println();
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         Document page = getPage();
         // css query language
@@ -36,11 +65,15 @@ public class Parser {
         Elements names = tableWth.select("tr[class=wth]");
         Elements values = tableWth.select("tr[valign=top]");
 
+        int index = 0;
+
         for (Element name : names) {
             String dateString = name.select("th[id=dt]").text();
             String date = getDateFromString(dateString);
+            System.out.println();
             System.out.println(date + "    Явление    Температура    Давление    Влажность    Ветер");
+            printFourValues(values, index);
         }
-        
+
     }
 }
