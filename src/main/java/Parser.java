@@ -15,7 +15,7 @@ public class Parser {
         Document page = Jsoup.parse(new URL(url), 3000);
         return page;
     }
-    
+
     private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");    /* 22.04 Суббота погода сегодня
                                                                                       22.04
                                                                                        d{2}\.\d{2} */
@@ -32,7 +32,7 @@ public class Parser {
 
         if (index == 0) {
             Element valueLn = values.get(3);
-            boolean isMorning = valueLn.text().contains("Утро");
+            boolean isMorning = valueLn.text().contains("Утро"); // где-то тут надо дописать switch (утро-день-вечер-ночь)
             if (isMorning) {
                 iterationCount = 3;
             }
