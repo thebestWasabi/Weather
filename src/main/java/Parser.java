@@ -15,12 +15,10 @@ public class Parser {
         Document page = Jsoup.parse(new URL(url), 3000);
         return page;
     }
-
-    // 22.04 Суббота погода сегодня
-    // 22.04
-    // \d{2}\.\d{2}
-    private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
-
+    
+    private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");    /* 22.04 Суббота погода сегодня
+                                                                                      22.04
+                                                                                       d{2}\.\d{2} */
     private static String getDateFromString(String stringDate) throws Exception {
         Matcher matcher = pattern.matcher(stringDate);
         if (matcher.find()) {
@@ -38,22 +36,13 @@ public class Parser {
             if (isMorning) {
                 iterationCount = 3;
             }
-            for (int i = 0; i < iterationCount; i++) {
-                Element valueLine = values.get(index + i);
-                for (Element td : valueLine.select("td")) {
-                    System.out.print(td.text() + "    ");
-                }
-                System.out.println();
+        }
+        for (int i = 0; i < iterationCount; i++) {
+            Element valueLine = values.get(index + i);
+            for (Element td : valueLine.select("td")) {
+                System.out.print(td.text() + "    ");
             }
-
-        } else {
-            for (int i = 0; i < iterationCount; i++) {
-                Element valueLine = values.get(index + i);
-                for (Element td : valueLine.select("td")) {
-                    System.out.print(td.text() + "    ");
-                }
-                System.out.println();
-            }
+            System.out.println();
         }
         return iterationCount;
     }
